@@ -15,11 +15,11 @@ resource "aws_iam_role" "ecs_task_role" {
   })
 }
 
-resource "aws_ecs_cluster" "selected" {
+resource "aws_ecs_cluster" "cvist-ecs-cluster" {
   name = var.ecs_cluster_name
 }
 
-resource "aws_ecs_task_definition" "selected" {
+resource "aws_ecs_task_definition" "cvist-ecs-task" {
   family                    = var.ecs_service_name
   network_mode              = "awsvpc"
   requires_compatibilities  = ["FARGATE"]
@@ -34,8 +34,8 @@ resource "aws_ecs_task_definition" "selected" {
     cpu       = 256
     portMappings = [
       {
-        containerPort = 80
-        hostPort      = 80
+        containerPort = 443
+        hostPort      = 8443
         protocol      = "tcp"
       },
     ]
@@ -46,8 +46,8 @@ resource "aws_ecs_task_definition" "selected" {
 
 resource "aws_ecs_service" "selected" {
   name            = var.ecs_service_name
-  cluster         = aws_ecs_cluster.selected.id
-  task_definition = aws_ecs_task_definition.selected.arn
+  cluster         = aws_ecs_cluster.cvist-ecs-cluster.id
+  task_definition = aws_ecs_task_definition.cvist-ecs-task.arn
   desired_count   = 1
   launch_type     = "FARGATE"
 

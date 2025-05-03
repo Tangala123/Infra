@@ -1,4 +1,4 @@
-resource "aws_lb" "selected" {
+resource "aws_lb" "alb-main" {
   name               = var.alb_name
   internal           = true
   load_balancer_type = "application"
@@ -9,16 +9,16 @@ resource "aws_lb" "selected" {
 }
 
 
-resource "aws_lb_target_group" "selected" {
+resource "aws_lb_target_group" "alb-tg" {
   name     = "${var.alb_name}-tg"
-  port     = 80
-  protocol = "HTTP"
+  port     = 443
+  protocol = "HTTPS"
   vpc_id   = var.vpc_id
 
   target_type = "ip"
 
   health_check {
-    path                = "/"
+    path                = "/cvist/start"
     protocol            = "HTTP"
     matcher             = "200-399"
     interval            = 30
@@ -29,20 +29,12 @@ resource "aws_lb_target_group" "selected" {
 }
 
 resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.selected.arn
-  port              = 80
-  protocol          = "HTTP"
+  load_balancer_arn = aws_lb.alb-main.arn
+  port              = 433
+  protocol          = "HTTPS"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.selected.arn
+    target_group_arn = aws_lb_target_group.alb-tg.arn
   }
-}
-
-output "alb_dns_name" {
-  value = aws_lb.selected.dns_name
-}
-
-output "target_group_arn" {
-  value = aws_lb_target_group.selected.arn
 }
