@@ -27,3 +27,13 @@ variable "security_group_id" {
   description = "The security group ID for ECS service"
   type        = string
 }
+
+variable "target_group_arn" {
+  description = "ARN of the ALB Target Group"
+  type        = string
+}
+
+variable "lb_listener_arn" {
+  description = "ARN of the ALB Listener"
+  type        = any
+}

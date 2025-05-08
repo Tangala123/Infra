@@ -34,7 +34,7 @@ resource "aws_ecs_task_definition" "cvist-ecs-task" {
     cpu       = 256
     portMappings = [
       {
-        containerPort = 443
+        containerPort = 8443
         hostPort      = 8443
         protocol      = "tcp"
       },
@@ -56,4 +56,11 @@ resource "aws_ecs_service" "selected" {
     security_groups = [var.security_group_id]
     assign_public_ip = false
   }
+  load_balancer {
+    target_group_arn = var.target_group_arn
+    container_name   = var.container_name
+    container_port   = 8443
+  }
+
+  depends_on = [var.lb_listener_arn]
 }

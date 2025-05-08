@@ -21,6 +21,8 @@ module "ecs" {
   container_image   = var.container_image
   security_group_id = module.network.security_group_id
   subnet_ids        = module.network.private_subnet_ids
+  target_group_arn   = module.alb.target_group_arn
+  lb_listener_arn    = module.alb.lb_listener_arn
 }
 
 module "alb" {
