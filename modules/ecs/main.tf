@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "cvist-ecs-task" {
   task_role_arn = aws_iam_role.ecs_task_role.arn
 }
 
-resource "aws_ecs_service" "selected" {
+resource "aws_ecs_service" "cvist-ecs-service" {
   name            = var.ecs_service_name
   cluster         = aws_ecs_cluster.cvist-ecs-cluster.id
   task_definition = aws_ecs_task_definition.cvist-ecs-task.arn
